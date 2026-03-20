@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SISTEMA ISO 11620 - Tesis</title>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Montserrat:wght@700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- AOS CSS & JS -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Alpine.js -->
+    <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/intersect@3.x.x/dist/cdn.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+    <!-- External Libraries (tsParticles, VanillaTilt, Chart.js) -->
+    <script src="https://cdn.jsdelivr.net/npm/tsparticles-engine@2/tsparticles.engine.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/tsparticles-basic@2/tsparticles.basic.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/tsparticles-interaction-particles-links@2/tsparticles.interaction.particles.links.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/tsparticles-move-base@2/tsparticles.move.base.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/tsparticles-shape-circle@2/tsparticles.shape.circle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/tsparticles-updater-color@2/tsparticles.updater.color.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/tsparticles-updater-opacity@2/tsparticles.updater.opacity.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/tsparticles-updater-out-modes@2/tsparticles.updater.out-modes.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/tsparticles-updater-size@2/tsparticles.updater.size.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.0/vanilla-tilt.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'], heading: ['Montserrat', 'sans-serif'] },
+                    colors: { background: '#020617', surface: 'rgba(255, 255, 255, 0.03)', cyanAccent: '#06b6d4' },
+                    animation: {
+                        'blob': 'blob 10s infinite',
+                        'shimmer': 'shimmer 2.5s linear infinite',
+                        'float': 'float 6s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        blob: { '0%': { transform: 'translate(0px, 0px) scale(1)' }, '33%': { transform: 'translate(40px, -50px) scale(1.1)' }, '66%': { transform: 'translate(-30px, 30px) scale(0.9)' }, '100%': { transform: 'translate(0px, 0px) scale(1)' } },
+                        shimmer: { from: { backgroundPosition: '200% center' }, to: { backgroundPosition: '-200% center' } },
+                        float: { '0%, 100%': { transform: 'translateY(0)' }, '50%': { transform: 'translateY(-20px)' } }
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Custom CSS Modularizado -->
+    <link rel="stylesheet" href="./assets/css/style.css">
+</head>
+<body class="bg-background text-slate-50 antialiased selection:bg-cyanAccent selection:text-white overflow-x-hidden">
+
+    <!-- Interactive Particles Background -->
+    <div id="tsparticles"></div>
+
+    <!-- Ambient Background Gradients -->
+    <div class="fixed top-0 left-0 w-full h-full overflow-hidden -z-10 pointer-events-none">
+        <div class="absolute top-[-10%] left-[-10%] w-[40vw] h-[40vw] rounded-full bg-cyan-900/20 blur-[120px] animate-blob"></div>
+        <div class="absolute bottom-[-10%] right-[-10%] w-[40vw] h-[40vw] rounded-full bg-purple-900/20 blur-[120px] animate-blob" style="animation-delay: 2s;"></div>
+        <div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMSIgY3k9IjEiIHI9IjEiIGZpbGw9InJnYmEoMjU1LDI1NSwyNTUsMC4wMykiLz48L3N2Zz4=')] opacity-30"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 glass-card border-b-0 py-4 px-6 md:px-12 flex justify-between items-center transition-all duration-300 backdrop-blur-xl bg-[#020617]/50">
+        <div class="text-xl font-heading font-black tracking-tighter hover:scale-105 transition-transform cursor-pointer">
+            <span class="text-cyanAccent">SISTEMA</span> ISO<span class="text-white/50 font-sans text-sm font-normal ml-2">11620</span>
+        </div>
+        <div class="hidden md:flex space-x-8 text-sm font-medium text-gray-300">
+            <a href="#problematica" class="hover:text-cyanAccent hover:-translate-y-1 transition-all">Diagnóstico</a>
+            <a href="#objetivos" class="hover:text-cyanAccent hover:-translate-y-1 transition-all">Objetivos</a>
+            <a href="#metodologia" class="hover:text-cyanAccent hover:-translate-y-1 transition-all">Metodología</a>
+            <a href="#tecnologias" class="hover:text-cyanAccent hover:-translate-y-1 transition-all">Tecnologías</a>
+            <a href="#resultados" class="hover:text-cyanAccent hover:-translate-y-1 transition-all">Impacto</a>
+        </div>
+    </nav>
+
+    <!-- 1. HERO SECTION -->
+    <section class="relative min-h-screen flex flex-col md:flex-row justify-center items-stretch px-6 md:px-16 pt-20 gap-0 overflow-hidden">
+        <!-- LEFT: Names + Title + CTA -->
+        <div data-aos="fade-right" class="flex-1 flex flex-col justify-center py-16 md:pr-12 z-10">
+            <!-- Author tag -->
+            <div class="inline-flex items-center mb-10 space-x-3">
+                <span class="text-xs text-cyanAccent uppercase font-bold tracking-widest border border-cyanAccent/40 px-4 py-1.5 rounded-full bg-cyanAccent/10">Defensa de Tesis · 2026</span>
+            </div>
+            <!-- Title -->
+            <h1 class="text-6xl md:text-8xl font-heading font-black tracking-tight leading-none mb-4 drop-shadow-2xl">
+                SISTEMA<br>
+                <span class="text-shimmer block">ISO 11620</span>
+            </h1>
+            <p class="text-gray-300 font-light mt-6 mb-10 text-lg max-w-lg">
+                Transformación Digital de la Red de Bibliotecas de la Universidad de Carabobo.
+            </p>
+
+            <!-- Author cards -->
+            <div class="flex flex-col sm:flex-row gap-4 mb-12">
+                <div class="glass-card rounded-2xl px-6 py-4 flex items-center space-x-4 flex-1 border-cyanAccent/30 shadow-lg">
+                    <div class="w-12 h-12 rounded-full bg-gradient-to-br from-cyanAccent to-blue-600 flex items-center justify-center text-white text-xl font-black font-heading shadow-lg flex-shrink-0">L</div>
+                    <div>
+                        <div class="text-white font-bold text-base">Leyber Colmenarez</div>
+                        <div class="text-cyanAccent/70 text-xs font-medium uppercase tracking-widest">Estudiante</div>
+                    </div>
+                </div>
+                <div class="glass-card rounded-2xl px-6 py-4 flex items-center space-x-4 flex-1 border-purple-500/30 shadow-lg">
+                    <div class="w-12 h-12 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-white text-xl font-black font-heading shadow-lg flex-shrink-0">G</div>
+                    <div>
+                        <div class="text-white font-bold text-base">Gustavo Romero</div>
+                        <div class="text-purple-400/70 text-xs font-medium uppercase tracking-widest">Estudiante</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CTAs -->
+            <div class="flex flex-col sm:flex-row gap-4">
+                <a href="#resultados" class="px-8 py-4 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-bold hover:shadow-[0_0_30px_rgba(6,182,212,0.6)] transition-all flex items-center justify-center hover:-translate-y-1">
+                    <i class="fa-solid fa-chart-pie mr-3"></i> Ver Impacto Real
+                </a>
+                <a href="#problematica" class="px-8 py-4 rounded-xl glass-card font-medium hover:bg-white/10 transition-all flex items-center justify-center group">
+                    Explorar Caso <i class="fa-solid fa-arrow-down ml-3 text-cyanAccent group-hover:translate-y-1 transition-transform"></i>
+                </a>
+            </div>
+        </div>
+
+        <!-- RIGHT: CSS Hub Diagram Decoration -->
+        <div data-aos="fade-left" data-aos-delay="300" class="hidden md:flex flex-1 items-center justify-center relative py-16">
+            <div class="absolute inset-0 bg-gradient-to-l from-cyanAccent/5 to-transparent pointer-events-none"></div>
+
+            <!-- Hub + nodes layout -->
+            <div class="relative w-80 h-80">
+                <!-- Pulsing outer ring -->
+                <div class="absolute inset-0 rounded-full border border-cyanAccent/10 animate-ping" style="animation-duration:3s"></div>
+                <div class="absolute inset-4 rounded-full border border-cyanAccent/15"></div>
+                <div class="absolute inset-10 rounded-full border border-white/5"></div>
+
+                <!-- Center hub -->
+                <div class="absolute inset-0 flex items-center justify-center">
+                    <div class="w-24 h-24 rounded-full bg-gradient-to-br from-cyan-500/30 to-blue-600/30 border-2 border-cyanAccent/60 flex flex-col items-center justify-center shadow-[0_0_40px_rgba(6,182,212,0.3)] text-center">
+                        <i class="fa-solid fa-database text-cyanAccent text-lg mb-1"></i>
+                        <span class="text-white font-black font-heading text-xs leading-tight">ISO<br>11620</span>
+                    </div>
+                </div>
+
+                <!-- Node: Top -->
+                <div class="absolute top-2 left-1/2 -translate-x-1/2 flex flex-col items-center">
+                    <div class="w-14 h-14 rounded-full glass-card border border-blue-400/40 flex flex-col items-center justify-center shadow-lg hover:border-blue-400 transition-all">
+                        <i class="fa-solid fa-chart-line text-blue-400 text-sm"></i>
+                        <span class="text-white text-[9px] font-bold mt-0.5">Cálculo</span>
+                    </div>
+                    <!-- line -->
+                    <div class="w-px h-8 bg-gradient-to-b from-blue-400/50 to-transparent"></div>
+                </div>
+
+                <!-- Node: Right -->
+                <div class="absolute right-2 top-1/2 -translate-y-1/2 flex items-center">
+                    <div class="h-px w-8 bg-gradient-to-r from-transparent to-cyanAccent/50"></div>
+                    <div class="w-14 h-14 rounded-full glass-card border border-cyanAccent/40 flex flex-col items-center justify-center shadow-lg hover:border-cyanAccent transition-all">
+                        <i class="fa-solid fa-file-pdf text-cyanAccent text-sm"></i>
+                        <span class="text-white text-[9px] font-bold mt-0.5">Reportes</span>
+                    </div>
+                </div>
+
+                <!-- Node: Bottom -->
+                <div class="absolute bottom-2 left-1/2 -translate-x-1/2 flex flex-col items-center">
+                    <div class="w-px h-8 bg-gradient-to-t from-purple-400/50 to-transparent"></div>
+                    <div class="w-14 h-14 rounded-full glass-card border border-purple-400/40 flex flex-col items-center justify-center shadow-lg hover:border-purple-400 transition-all">
+                        <i class="fa-solid fa-users text-purple-400 text-sm"></i>
+                        <span class="text-white text-[9px] font-bold mt-0.5">Usuarios</span>
+                    </div>
+                </div>
+
+                <!-- Node: Left -->
+                <div class="absolute left-2 top-1/2 -translate-y-1/2 flex items-center">
+                    <div class="w-14 h-14 rounded-full glass-card border border-pink-400/40 flex flex-col items-center justify-center shadow-lg hover:border-pink-400 transition-all">
+                        <i class="fa-solid fa-building-columns text-pink-400 text-sm"></i>
+                        <span class="text-white text-[9px] font-bold mt-0.5">Bibliotecas</span>
+                    </div>
+                    <div class="h-px w-8 bg-gradient-to-l from-transparent to-pink-400/50"></div>
+                </div>
+
+                <!-- Floating stat badges -->
+                <div class="absolute -top-4 -right-8 glass-card rounded-xl px-3 py-2 border-cyanAccent/30 text-center shadow-lg animate-float">
+                    <div class="text-cyanAccent font-black font-heading text-lg leading-none">85%</div>
+                    <div class="text-gray-400 text-[9px] uppercase tracking-widest">Productividad</div>
+                </div>
+                <div class="absolute -bottom-4 -left-8 glass-card rounded-xl px-3 py-2 border-purple-500/30 text-center shadow-lg animate-float" style="animation-delay:1s">
+                    <div class="text-purple-400 font-black font-heading text-lg leading-none">15x</div>
+                    <div class="text-gray-400 text-[9px] uppercase tracking-widest">Más rápido</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 2. DIAGNÓSTICO -->
+    <section id="problematica" class="py-24 px-6 md:px-12 max-w-7xl mx-auto">
+        <div data-aos="fade-right" class="mb-16">
+            <h2 class="text-cyanAccent font-bold tracking-widest uppercase text-sm mb-2 flex items-center">
+                <span class="w-8 h-1 bg-cyanAccent mr-4 rounded-full"></span> Diagnóstico del Problema
+            </h2>
+            <h3 class="text-5xl font-heading font-black text-white drop-shadow-lg">Por qué evolucionar.</h3>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 md:grid-rows-2 gap-8">
+            <div data-tilt data-tilt-glare data-tilt-max-glare="0.2" data-aos="zoom-in" data-aos-delay="100" class="glass-card glow-border rounded-3xl p-10 md:col-span-2 flex flex-col justify-between overflow-hidden relative group">
+                <div class="absolute -right-10 -top-10 text-[200px] text-white/5 group-hover:text-red-500/10 group-hover:rotate-12 transition-all duration-700 pointer-events-none" style="transform: translateZ(-20px);">
+                    <i class="fa-solid fa-clock-rotate-left"></i>
+                </div>
+                <div style="transform: translateZ(30px);">
+                    <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-red-500/20 to-orange-500/20 text-red-400 flex items-center justify-center text-3xl mb-8 shadow-inner border border-red-500/30">
+                        <i class="fa-solid fa-hourglass-half"></i>
+                    </div>
+                    <div class="text-6xl font-black font-heading mb-4 text-transparent bg-clip-text bg-gradient-to-r from-red-400 to-orange-500">6-10 hr</div>
+                    <h4 class="text-2xl font-bold text-gray-100 mb-3">Trabajo manual excesivo</h4>
+                    <p class="text-gray-400 text-lg max-w-lg leading-relaxed">El cálculo de métricas consume jornadas enteras revisando registros físicos y cruzando datos manualmente, abriendo la puerta a errores humanos de gran escala.</p>
+                </div>
+            </div>
+
+            <div data-tilt data-tilt-glare data-tilt-max-glare="0.2" data-aos="zoom-in" data-aos-delay="200" class="glass-card rounded-3xl p-10 flex flex-col justify-between group">
+                <div style="transform: translateZ(30px);">
+                    <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-green-500/20 to-emerald-500/20 text-green-400 flex items-center justify-center text-3xl mb-8 group-hover:scale-110 transition-transform shadow-inner border border-green-500/30"><i class="fa-solid fa-file-excel"></i></div>
+                    <h4 class="text-2xl font-bold text-gray-100 mb-3">Excel Disperso</h4>
+                    <p class="text-gray-400 leading-relaxed">Información fragmentada sin integridad referencial. Imposible generar auditorías sólidas.</p>
+                </div>
+            </div>
+
+            <div data-tilt data-tilt-glare data-tilt-max-glare="0.2" data-aos="zoom-in" data-aos-delay="300" class="glass-card rounded-3xl p-10 flex flex-col justify-between group">
+                <div style="transform: translateZ(30px);">
+                    <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-purple-500/20 to-indigo-500/20 text-purple-400 flex items-center justify-center text-3xl mb-8 group-hover:scale-110 transition-transform shadow-inner border border-purple-500/30"><i class="fa-solid fa-network-wired"></i></div>
+                    <h4 class="text-2xl font-bold text-gray-100 mb-3">Ausencia de Control</h4>
+                    <p class="text-gray-400 leading-relaxed">Desconexión total institucional. La gerencia no posee una vista panorámica del rendimiento real.</p>
+                </div>
+            </div>
+
+            <div data-tilt data-tilt-glare data-tilt-max-glare="0.2" data-aos="zoom-in" data-aos-delay="400" class="glass-card rounded-3xl p-10 md:col-span-2 border-cyanAccent/50 relative overflow-hidden bg-gradient-to-br from-cyanAccent/10 to-blue-900/20 shadow-[0_0_50px_rgba(6,182,212,0.15)]">
+                <div class="absolute inset-x-0 bottom-0 h-2 bg-gradient-to-r from-transparent via-cyanAccent to-transparent animate-pulse"></div>
+                <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-8 h-full" style="transform: translateZ(40px);">
+                    <div class="flex-1">
+                        <div class="inline-flex items-center space-x-2 px-5 py-2 rounded-full bg-cyanAccent/20 text-cyanAccent text-xs font-bold mb-6 tracking-widest uppercase border border-cyanAccent/40"><span class="w-2 h-2 rounded-full bg-cyanAccent animate-ping"></span><span>Solución Digital</span></div>
+                        <h4 class="text-4xl font-black font-heading text-white mb-4">Automatización<br><span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-400">Inteligente</span></h4>
+                        <p class="text-gray-300 text-lg max-w-md">Proceso computarizado bajo estándares rigurosos. Cálculos instantáneos al alcance de un clic para la UC.</p>
+                    </div>
+                    <div class="text-right border-l-2 border-white/10 pl-8 h-full flex flex-col justify-center">
+                        <div class="text-sm text-cyanAccent font-bold uppercase tracking-widest mb-2 opacity-80">Tiempo Estimado</div>
+                        <div class="text-7xl font-black font-heading text-white drop-shadow-[0_0_20px_rgba(255,255,255,0.5)]"><span class="text-cyanAccent">&lt;</span> 15m</div>
+                        <div class="mt-4 flex space-x-2 justify-end text-gray-400"><i class="fa-solid fa-bolt"></i><i class="fa-solid fa-microchip"></i></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 3. MARCO ESTRATÉGICO -->
+    <section id="objetivos" class="py-24 px-6 md:px-12 max-w-7xl mx-auto relative bg-background/50 backdrop-blur-3xl border-y border-white/5">
+        <div data-aos="fade-up" class="text-center mb-16">
+            <h2 class="text-cyanAccent font-bold tracking-widest uppercase text-sm mb-2">Marco Estratégico</h2>
+            <h3 class="text-5xl font-heading font-black text-white drop-shadow-lg">Objetivos del Sistema</h3>
+        </div>
+
+        <div data-tilt data-tilt-glare data-tilt-max-glare="0.1" data-aos="zoom-in" class="glass-card rounded-3xl p-10 mb-12 relative overflow-hidden text-center group bg-gradient-to-br from-cyanAccent/10 to-transparent">
+            <div class="absolute inset-0 bg-cyanAccent/5 group-hover:bg-cyanAccent/10 transition-colors"></div>
+            <h4 class="text-cyanAccent font-bold text-xl mb-4 tracking-widest uppercase relative z-10">Objetivo General</h4>
+            <p class="text-2xl md:text-3xl text-white font-light max-w-4xl mx-auto leading-relaxed relative z-10">Desarrollar un sistema de información web para el cálculo y gestión de indicadores de rendimiento bajo la norma <span class="text-cyanAccent font-bold">ISO 11620</span> en la Red de Bibliotecas de la Universidad de Carabobo.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div data-tilt data-aos="fade-up" data-aos-delay="100" class="glass-card rounded-2xl p-8 hover:border-blue-500/50 transition-all flex flex-col group">
+                <div class="text-4xl text-blue-400 mb-6 drop-shadow-[0_0_15px_rgba(59,130,246,0.5)]"><i class="fa-solid fa-magnifying-glass-chart"></i></div>
+                <h5 class="text-xl font-bold text-white mb-2">1. Diagnosticar</h5>
+                <p class="text-gray-400 text-sm">Examinar los procesos actuales de recolección y cálculo de datos estadísticos bibliotecarios.</p>
+            </div>
+            
+            <div data-tilt data-aos="fade-up" data-aos-delay="200" class="glass-card rounded-2xl p-8 hover:border-indigo-500/50 transition-all flex flex-col group">
+                <div class="text-4xl text-indigo-400 mb-6 drop-shadow-[0_0_15px_rgba(99,102,241,0.5)]"><i class="fa-solid fa-sitemap"></i></div>
+                <h5 class="text-xl font-bold text-white mb-2">2. Analizar</h5>
+                <p class="text-gray-400 text-sm">Determinar los requerimientos funcionales y no funcionales que debe satisfacer el software (Ingeniería de Requisitos).</p>
+            </div>
+
+            <div data-tilt data-aos="fade-up" data-aos-delay="300" class="glass-card rounded-2xl p-8 hover:border-purple-500/50 transition-all flex flex-col group">
+                <div class="text-4xl text-purple-400 mb-6 drop-shadow-[0_0_15px_rgba(168,85,247,0.5)]"><i class="fa-solid fa-pen-ruler"></i></div>
+                <h5 class="text-xl font-bold text-white mb-2">3. Diseñar</h5>
+                <p class="text-gray-400 text-sm">Modelar la arquitectura de la base de datos relacional y construir la interfaz gráfica de usuario moderna.</p>
+            </div>
+
+            <div data-tilt data-aos="fade-up" data-aos-delay="400" class="glass-card rounded-2xl p-8 hover:border-pink-500/50 transition-all flex flex-col group">
+                <div class="text-4xl text-pink-400 mb-6 drop-shadow-[0_0_15px_rgba(236,72,153,0.5)]"><i class="fa-solid fa-code"></i></div>
+                <h5 class="text-xl font-bold text-white mb-2">4. Desarrollar</h5>
+                <p class="text-gray-400 text-sm">Codificar la solución tecnológica aplicando los lenguajes, stacks y frameworks previamente seleccionados.</p>
+            </div>
+
+            <div data-tilt data-aos="fade-up" data-aos-delay="500" class="glass-card rounded-2xl p-8 hover:border-red-500/50 transition-all flex flex-col group lg:col-span-2">
+                <div class="flex items-center space-x-6">
+                    <div class="text-4xl text-red-400 drop-shadow-[0_0_15px_rgba(239,68,68,0.5)]"><i class="fa-solid fa-clipboard-check"></i></div>
+                    <div>
+                        <h5 class="text-xl font-bold text-white mb-2">5. Evaluar</h5>
+                        <p class="text-gray-400 text-sm">Efectuar pruebas exhaustivas de funcionalidad, caja blanca e integración para la validación con los usuarios finales de la UC.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 4. JUSTIFICACIÓN -->
+    <section id="justificacion" class="py-24 px-6 md:px-12 max-w-7xl mx-auto">
+        <div data-aos="fade-right" class="mb-16">
+            <h2 class="text-cyanAccent font-bold tracking-widest uppercase text-sm mb-2 flex items-center">
+                <span class="w-8 h-1 bg-cyanAccent mr-4 rounded-full"></span> Análisis de Factibilidad
+            </h2>
+            <h3 class="text-5xl font-heading font-black text-white drop-shadow-lg">Justificación del Proyecto</h3>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div data-tilt data-aos="flip-up" data-aos-delay="100" class="glass-card rounded-3xl p-8 border-t-4 border-t-cyan-400 relative overflow-hidden group">
+                <div class="absolute -right-10 -top-10 w-32 h-32 bg-cyan-400/10 rounded-full blur-[30px] group-hover:bg-cyan-400/20 transition-all"></div>
+                <div class="text-3xl text-cyan-400 mb-4"><i class="fa-solid fa-bolt"></i></div>
+                <h4 class="text-lg font-bold text-white mb-3">Práctica</h4>
+                <p class="text-gray-400 text-sm">Automatiza una labor rutinaria y propensa a error, transformando meses de manipulación manual en reportes instantáneos.</p>
+            </div>
+            
+            <div data-tilt data-aos="flip-up" data-aos-delay="200" class="glass-card rounded-3xl p-8 border-t-4 border-t-blue-400 relative overflow-hidden group">
+                <div class="absolute -right-10 -top-10 w-32 h-32 bg-blue-400/10 rounded-full blur-[30px] group-hover:bg-blue-400/20 transition-all"></div>
+                <div class="text-3xl text-blue-400 mb-4"><i class="fa-solid fa-microchip"></i></div>
+                <h4 class="text-lg font-bold text-white mb-3">Tecnológica</h4>
+                <p class="text-gray-400 text-sm">Introduce a la Red de Bibliotecas a la Transformación Digital mediante estándares web modernos de alta concurrencia.</p>
+            </div>
+
+            <div data-tilt data-aos="flip-up" data-aos-delay="300" class="glass-card rounded-3xl p-8 border-t-4 border-t-pink-400 relative overflow-hidden group">
+                <div class="absolute -right-10 -top-10 w-32 h-32 bg-pink-400/10 rounded-full blur-[30px] group-hover:bg-pink-400/20 transition-all"></div>
+                <div class="text-3xl text-pink-400 mb-4"><i class="fa-solid fa-graduation-cap"></i></div>
+                <h4 class="text-lg font-bold text-white mb-3">Académica</h4>
+                <p class="text-gray-400 text-sm">Representa un aporte metodológico sólido para futuras investigaciones de ingeniería que requieran la gestión de calidad ISO.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 5. METODOLOGÍA -->
+    <section id="metodologia" class="py-24 relative">
+        <div class="max-w-4xl mx-auto px-6">
+            <div class="text-center mb-16" data-aos="fade-up">
+                <h2 class="text-cyanAccent font-bold tracking-widest uppercase text-sm mb-2">Ingeniería de Software</h2>
+                <h3 class="text-5xl font-heading font-black mb-4">Ciclo de Vida: Cascada</h3>
+                <p class="text-gray-400">Enfoque cuantitativo y de proyecto factible, estructurado firmemente en 6 fases de progreso secuencial.</p>
+            </div>
+
+            <div class="relative">
+                <div class="absolute left-[28px] md:left-1/2 top-0 bottom-0 w-1 bg-cyan-900 md:-translate-x-1/2 rounded-full overflow-hidden">
+                    <div class="absolute top-0 w-full h-1/2 bg-cyanAccent shadow-[0_0_15px_#06b6d4] rounded-full animate-pulse"></div>
+                </div>
+
+                <div class="space-y-12 relative z-10">
+                    <div class="flex flex-col md:flex-row items-center md:justify-between group" data-aos="fade-up">
+                        <div class="w-full md:w-5/12 ml-16 md:ml-0 md:text-right md:pr-12 text-left mb-4 md:mb-0">
+                            <h4 class="text-xl font-bold text-white group-hover:text-cyanAccent transition-colors">Diagnóstico</h4>
+                            <p class="text-gray-400 text-sm mt-2">Levantamiento in-situ de la problemática y procesos manuales.</p>
+                        </div>
+                        <div class="absolute left-0 md:left-1/2 md:-translate-x-1/2 w-14 h-14 rounded-full bg-background border-2 border-cyanAccent flex items-center justify-center text-cyanAccent font-bold text-lg group-hover:bg-cyanAccent group-hover:text-white group-hover:scale-110 transition-all glow-border">1</div>
+                        <div class="hidden md:block w-5/12 pl-12"></div>
+                    </div>
+
+                    <div class="flex flex-col md:flex-row items-center md:justify-between group" data-aos="fade-up">
+                        <div class="hidden md:block w-5/12 pr-12"></div>
+                        <div class="absolute left-0 md:left-1/2 md:-translate-x-1/2 w-14 h-14 rounded-full bg-background border-2 border-cyanAccent flex items-center justify-center text-cyanAccent font-bold text-lg group-hover:bg-cyanAccent group-hover:text-white group-hover:scale-110 transition-all glow-border">2</div>
+                        <div class="w-full md:w-5/12 ml-16 md:ml-0 pl-0 md:pl-12 text-left">
+                            <h4 class="text-xl font-bold text-white group-hover:text-cyanAccent transition-colors">Requerimientos</h4>
+                            <p class="text-gray-400 text-sm mt-2">Definición de necesidades funcionales alineadas a B.1 y B.2 de la norma ISO.</p>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col md:flex-row items-center md:justify-between group" data-aos="fade-up">
+                        <div class="w-full md:w-5/12 ml-16 md:ml-0 md:text-right md:pr-12 text-left mb-4 md:mb-0">
+                            <h4 class="text-xl font-bold text-white group-hover:text-cyanAccent transition-colors">Análisis y Diseño</h4>
+                            <p class="text-gray-400 text-sm mt-2">Modelado Entidad-Relación y diseño de arquitectura UI/UX moderna.</p>
+                        </div>
+                        <div class="absolute left-0 md:left-1/2 md:-translate-x-1/2 w-14 h-14 rounded-full bg-background border-2 border-cyanAccent flex items-center justify-center text-cyanAccent font-bold text-lg group-hover:bg-cyanAccent group-hover:text-white group-hover:scale-110 transition-all glow-border">3</div>
+                        <div class="hidden md:block w-5/12 pl-12"></div>
+                    </div>
+
+                    <div class="flex flex-col md:flex-row items-center md:justify-between group" data-aos="fade-up">
+                        <div class="hidden md:block w-5/12 pr-12"></div>
+                        <div class="absolute left-0 md:left-1/2 md:-translate-x-1/2 w-14 h-14 rounded-full bg-background border-2 border-cyanAccent flex items-center justify-center text-cyanAccent font-bold text-lg group-hover:bg-cyanAccent group-hover:text-white group-hover:scale-110 transition-all glow-border">4</div>
+                        <div class="w-full md:w-5/12 ml-16 md:ml-0 pl-0 md:pl-12 text-left">
+                            <h4 class="text-xl font-bold text-white group-hover:text-cyanAccent transition-colors">Desarrollo</h4>
+                            <p class="text-gray-400 text-sm mt-2">Codificación lógica, validaciones y programación de reportes.</p>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col md:flex-row items-center md:justify-between group" data-aos="fade-up">
+                        <div class="w-full md:w-5/12 ml-16 md:ml-0 md:text-right md:pr-12 text-left mb-4 md:mb-0">
+                            <h4 class="text-xl font-bold text-white group-hover:text-cyanAccent transition-colors">Pruebas</h4>
+                            <p class="text-gray-400 text-sm mt-2">Validación de integridad de datos y QA con roles de bibliotecarios.</p>
+                        </div>
+                        <div class="absolute left-0 md:left-1/2 md:-translate-x-1/2 w-14 h-14 rounded-full bg-background border-2 border-cyanAccent flex items-center justify-center text-cyanAccent font-bold text-lg group-hover:bg-cyanAccent group-hover:text-white group-hover:scale-110 transition-all glow-border">5</div>
+                        <div class="hidden md:block w-5/12 pl-12"></div>
+                    </div>
+
+                    <div class="flex flex-col md:flex-row items-center md:justify-between group" data-aos="fade-up">
+                        <div class="hidden md:block w-5/12 pr-12"></div>
+                        <div class="absolute left-0 md:left-1/2 md:-translate-x-1/2 w-14 h-14 rounded-full bg-background border-2 border-cyanAccent flex items-center justify-center text-cyanAccent font-bold text-lg group-hover:bg-cyanAccent group-hover:text-white group-hover:scale-110 transition-all glow-border"><i class="fa-solid fa-flag-checkered"></i></div>
+                        <div class="w-full md:w-5/12 ml-16 md:ml-0 pl-0 md:pl-12 text-left">
+                            <h4 class="text-xl font-bold text-white group-hover:text-cyanAccent transition-colors">Sistema Final</h4>
+                            <p class="text-gray-400 text-sm mt-2">Despliegue y entrega del Sistema en ejecución para su pase a producción.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 6. ENTIDAD-RELACIÓN -->
+    <section id="database" class="py-24 px-6 relative overflow-hidden bg-background/80 backdrop-blur-3xl border-y border-white/5">
+        <div class="max-w-4xl mx-auto">
+            <div class="text-center mb-16" data-aos="fade-up">
+                <h2 class="text-cyanAccent font-bold tracking-widest uppercase text-sm mb-2">Arquitectura de Datos</h2>
+                <h3 class="text-5xl font-heading font-black mb-4 drop-shadow-lg">Modelo Entidad-Relación</h3>
+                <p class="text-gray-400 max-w-2xl mx-auto text-lg">Estructura normalizada en PostgreSQL que garantiza la integridad referencial para auditorías eficientes.</p>
+            </div>
+
+            <div data-aos="zoom-in" class="code-block relative shadow-[0_0_50px_rgba(6,182,212,0.1)] glow-border" data-tilt data-tilt-glare data-tilt-max-glare="0.1">
+                <div class="absolute top-4 right-4 text-gray-500 text-xs uppercase tracking-widest flex items-center"><i class="fa-solid fa-code mr-2"></i> SQL Schema</div>
+                <pre><code class="language-sql"><span class="keyword">CREATE TABLE</span> <span class="table-name">bibliotecas</span> (
+    <span class="comment">-- Entidad Principal de la Red Institucional</span>
+    id_biblioteca   <span class="type">SERIAL PRIMARY KEY</span>,
+    nombre          <span class="type">VARCHAR(100) NOT NULL</span>,
+    facultad        <span class="type">VARCHAR(100) NOT NULL</span>
+);
+
+<span class="keyword">CREATE TABLE</span> <span class="table-name">usuarios</span> (
+    <span class="comment">-- Control de Acceso RBAC (Roles Autorizados)</span>
+    id_usuario      <span class="type">SERIAL PRIMARY KEY</span>,
+    id_biblioteca   <span class="type">INTEGER REFERENCES</span> <span class="table-name">bibliotecas</span>(id_biblioteca),
+    rol             <span class="type">VARCHAR(20) NOT NULL</span> <span class="comment">-- 'Admin_Regional' / 'Analista'</span>
+);
+
+<span class="keyword">CREATE TABLE</span> <span class="table-name">registros_datos</span> (
+    <span class="comment">-- Data en crudo importada a la plataforma</span>
+    id_registro     <span class="type">SERIAL PRIMARY KEY</span>,
+    id_biblioteca   <span class="type">INTEGER REFERENCES</span> <span class="table-name">bibliotecas</span>(id_biblioteca),
+    periodo         <span class="type">DATE NOT NULL</span>,
+    valor_metricas  <span class="type">JSONB NOT NULL</span>
+);
+
+<span class="keyword">CREATE TABLE</span> <span class="table-name">indicadores_calculados</span> (
+    <span class="comment">-- Resultados Algorítmicos ISO 11620 con Foreign Keys estrictas</span>
+    id_resultado    <span class="type">SERIAL PRIMARY KEY</span>,
+    id_registro     <span class="type">INTEGER REFERENCES</span> <span class="table-name">registros_datos</span>(id_registro),
+    puntuacion_b1   <span class="type">DECIMAL(5,2)</span>,
+    puntuacion_b2   <span class="type">DECIMAL(5,2)</span>
+);</code></pre>
+            </div>
+        </div>
+    </section>
+
+    <!-- 7. TECNOLOGÍAS USADAS -->
+    <section id="tecnologias" class="py-24 px-6 relative overflow-hidden">
+        <div class="max-w-7xl mx-auto" x-data="{ activeTech: null }">
+            <div class="text-center mb-16" data-aos="fade-up">
+                <h2 class="text-cyanAccent font-bold tracking-widest uppercase text-sm mb-2">Ingeniería Web</h2>
+                <h3 class="text-5xl font-heading font-black mb-4 drop-shadow-lg">Arquitectura del Stack</h3>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="200">
+                <!-- HTML5 -->
+                <div data-tilt data-tilt-scale="1.05" @click="activeTech = activeTech === 'html' ? null : 'html'" class="glass-card rounded-2xl p-8 cursor-pointer hover:border-orange-400/50 transition-all flex flex-col group relative" :class="activeTech === 'html' ? 'border-orange-400 bg-white/10' : ''">
+                    <div class="flex items-center space-x-4 mb-2 relative z-10">
+                        <div class="w-14 h-14 rounded-xl bg-orange-500/20 text-orange-400 flex items-center justify-center text-3xl border border-orange-500/30"><i class="fa-brands fa-html5"></i></div>
+                        <h4 class="text-xl font-bold text-white group-hover:text-orange-400 transition-colors">HTML5</h4>
+                    </div>
+                    <div x-show="activeTech === 'html'" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4" x-transition:enter-end="opacity-100 translate-y-0" x-cloak class="text-gray-300 pt-4 mt-4 border-t border-white/10 text-sm">
+                        <strong>Estructura Semántica.</strong> Base del markup moderno. El sistema presenta formularios estructurados y accesibles por la norma.
+                    </div>
+                </div>
+                <!-- JavaScript -->
+                <div data-tilt data-tilt-scale="1.05" @click="activeTech = activeTech === 'js' ? null : 'js'" class="glass-card rounded-2xl p-8 cursor-pointer hover:border-yellow-400/50 transition-all flex flex-col group relative" :class="activeTech === 'js' ? 'border-yellow-400 bg-white/10' : ''">
+                    <div class="flex items-center space-x-4 mb-2 relative z-10">
+                        <div class="w-14 h-14 rounded-xl bg-yellow-500/20 text-yellow-400 flex items-center justify-center text-3xl border border-yellow-500/30"><i class="fa-brands fa-js"></i></div>
+                        <h4 class="text-xl font-bold text-white group-hover:text-yellow-400 transition-colors">JavaScript</h4>
+                    </div>
+                    <div x-show="activeTech === 'js'" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4" x-transition:enter-end="opacity-100 translate-y-0" x-cloak class="text-gray-300 pt-4 mt-4 border-t border-white/10 text-sm">
+                        <strong>Lógica Frontend.</strong> El motor de interactividad. Maneja respuestas dinámicas, validaciones en tiempo real y gráficas Chart.js.
+                    </div>
+                </div>
+                <!-- PHP -->
+                <div data-tilt data-tilt-scale="1.05" @click="activeTech = activeTech === 'php' ? null : 'php'" class="glass-card rounded-2xl p-8 cursor-pointer hover:border-blue-500/50 transition-all flex flex-col group relative" :class="activeTech === 'php' ? 'border-blue-500 bg-white/10' : ''">
+                    <div class="flex items-center space-x-4 mb-2 relative z-10">
+                        <div class="w-14 h-14 rounded-xl bg-blue-600/20 text-blue-400 flex items-center justify-center text-3xl font-bold font-heading border border-blue-500/30"><i class="fa-brands fa-php"></i></div>
+                        <h4 class="text-xl font-bold text-white group-hover:text-blue-400 transition-colors">PHP 7.4</h4>
+                    </div>
+                    <div x-show="activeTech === 'php'" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4" x-transition:enter-end="opacity-100 translate-y-0" x-cloak class="text-gray-300 pt-4 mt-4 border-t border-white/10 text-sm">
+                        <strong>Motor Lógico.</strong> Procesa los algoritmos ISO 11620 del backend y gestiona sesiones de usuario de forma segura con patrón MVC.
+                    </div>
+                </div>
+                <!-- PostgreSQL -->
+                <div data-tilt data-tilt-scale="1.05" @click="activeTech = activeTech === 'pgsql' ? null : 'pgsql'" class="glass-card rounded-2xl p-8 cursor-pointer hover:border-indigo-400/50 transition-all flex flex-col group relative" :class="activeTech === 'pgsql' ? 'border-indigo-400 bg-white/10' : ''">
+                    <div class="flex items-center space-x-4 mb-2 relative z-10">
+                        <div class="w-14 h-14 rounded-xl bg-indigo-500/20 text-indigo-400 flex items-center justify-center text-3xl border border-indigo-400/30"><i class="fa-solid fa-server"></i></div>
+                        <h4 class="text-xl font-bold text-white group-hover:text-indigo-400 transition-colors">PostgreSQL</h4>
+                    </div>
+                    <div x-show="activeTech === 'pgsql'" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4" x-transition:enter-end="opacity-100 translate-y-0" x-cloak class="text-gray-300 pt-4 mt-4 border-t border-white/10 text-sm">
+                        <strong>Persistencia.</strong> RDBMS para mantener integridad referencial y proteger los datos históricos de toda la Red de Bibliotecas.
+                    </div>
+                </div>
+                <!-- Chart.js -->
+                <div data-tilt data-tilt-scale="1.05" @click="activeTech = activeTech === 'chartjs' ? null : 'chartjs'" class="glass-card rounded-2xl p-8 cursor-pointer hover:border-pink-400/50 transition-all flex flex-col group relative" :class="activeTech === 'chartjs' ? 'border-pink-400 bg-white/10' : ''">
+                    <div class="flex items-center space-x-4 mb-2 relative z-10">
+                        <div class="w-14 h-14 rounded-xl bg-pink-500/20 text-pink-400 flex items-center justify-center text-3xl border border-pink-500/30"><i class="fa-solid fa-chart-bar"></i></div>
+                        <h4 class="text-xl font-bold text-white group-hover:text-pink-400 transition-colors">Chart.js</h4>
+                    </div>
+                    <div x-show="activeTech === 'chartjs'" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4" x-transition:enter-end="opacity-100 translate-y-0" x-cloak class="text-gray-300 pt-4 mt-4 border-t border-white/10 text-sm">
+                        <strong>Visualización.</strong> Genera gráficos de barras, líneas y polar con datos ISO en tiempo real del dashboard institucional.
+                    </div>
+                </div>
+                <!-- html2pdf -->
+                <div data-tilt data-tilt-scale="1.05" @click="activeTech = activeTech === 'pdf' ? null : 'pdf'" class="glass-card rounded-2xl p-8 cursor-pointer hover:border-red-400/50 transition-all flex flex-col group relative" :class="activeTech === 'pdf' ? 'border-red-400 bg-white/10' : ''">
+                    <div class="flex items-center space-x-4 mb-2 relative z-10">
+                        <div class="w-14 h-14 rounded-xl bg-red-500/20 text-red-400 flex items-center justify-center text-3xl border border-red-500/30"><i class="fa-solid fa-file-pdf"></i></div>
+                        <h4 class="text-xl font-bold text-white group-hover:text-red-400 transition-colors">html2pdf.js</h4>
+                    </div>
+                    <div x-show="activeTech === 'pdf'" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4" x-transition:enter-end="opacity-100 translate-y-0" x-cloak class="text-gray-300 pt-4 mt-4 border-t border-white/10 text-sm">
+                        <strong>Reportes PDF.</strong> Exporta informes ISO oficiales directamente desde el navegador sin dependencias de servidor adicionales.
+                    </div>
+                </div>
+                <!-- Tailwind CSS -->
+                <div data-tilt data-tilt-scale="1.05" @click="activeTech = activeTech === 'tw' ? null : 'tw'" class="glass-card rounded-2xl p-8 cursor-pointer hover:border-cyan-400/50 transition-all flex flex-col group relative" :class="activeTech === 'tw' ? 'border-cyan-400 bg-white/10' : ''">
+                    <div class="flex items-center space-x-4 mb-2 relative z-10">
+                        <div class="w-14 h-14 rounded-xl bg-cyan-500/20 text-cyan-400 flex items-center justify-center text-3xl border border-cyan-500/30"><i class="fa-brands fa-css3-alt"></i></div>
+                        <h4 class="text-xl font-bold text-white group-hover:text-cyan-400 transition-colors">Tailwind CSS</h4>
+                    </div>
+                    <div x-show="activeTech === 'tw'" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4" x-transition:enter-end="opacity-100 translate-y-0" x-cloak class="text-gray-300 pt-4 mt-4 border-t border-white/10 text-sm">
+                        <strong>UI Moderna.</strong> Estilos utility-first con glassmorphism, animaciones y responsive design a lo largo de toda la plataforma.
+                    </div>
+                </div>
+                <!-- Git -->
+                <div data-tilt data-tilt-scale="1.05" @click="activeTech = activeTech === 'git' ? null : 'git'" class="glass-card rounded-2xl p-8 cursor-pointer hover:border-orange-500/50 transition-all flex flex-col group relative" :class="activeTech === 'git' ? 'border-orange-500 bg-white/10' : ''">
+                    <div class="flex items-center space-x-4 mb-2 relative z-10">
+                        <div class="w-14 h-14 rounded-xl bg-orange-500/20 text-orange-500 flex items-center justify-center text-3xl border border-orange-500/30"><i class="fa-brands fa-git-alt"></i></div>
+                        <h4 class="text-xl font-bold text-white group-hover:text-orange-400 transition-colors">Git</h4>
+                    </div>
+                    <div x-show="activeTech === 'git'" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4" x-transition:enter-end="opacity-100 translate-y-0" x-cloak class="text-gray-300 pt-4 mt-4 border-t border-white/10 text-sm">
+                        <strong>Versión y Colaboración.</strong> Control de cambios completo con GitHub para trazabilidad del desarrollo a lo largo del proyecto.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 8. IMPACTO Y RESULTADOS -->
+    <section id="resultados" class="py-24 px-6 md:px-12 max-w-7xl mx-auto">
+        <div data-aos="fade-up" class="text-center mb-16">
+            <h2 class="text-cyanAccent font-bold tracking-widest uppercase text-sm mb-2">Impacto Real Previsto</h2>
+            <h3 class="text-5xl font-heading font-black drop-shadow-lg">Resultados del Sistema</h3>
+            <p class="text-gray-400 mt-4 max-w-2xl mx-auto">Evidencia cuantitativa que fundamenta el valor tecnológico de la plataforma para la Red de Bibliotecas.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+            <div data-tilt data-tilt-glare data-tilt-max-glare="0.2" data-aos="fade-right" data-aos-delay="100" class="glass-card rounded-3xl p-8 relative overflow-hidden flex flex-col justify-center h-[400px]">
+                <div class="absolute inset-0 bg-gradient-to-br from-blue-900/10 to-transparent -z-10"></div>
+                <h4 class="text-white font-bold mb-4 font-heading text-xl">Rendimiento Operativo vs Tiempo</h4>
+                <div class="w-full h-full relative" style="transform: translateZ(20px);">
+                    <canvas id="performanceChart"></canvas>
+                </div>
+            </div>
+
+            <div class="flex flex-col gap-8">
+                <div data-tilt data-tilt-glare data-tilt-max-glare="0.2" data-aos="fade-left" data-aos-delay="200" class="glass-card rounded-3xl p-8 flex-1 flex flex-col justify-center relative group overflow-hidden">
+                    <div class="absolute -right-20 -top-20 w-64 h-64 bg-cyanAccent/20 blur-[80px] group-hover:bg-cyanAccent/40 transition-colors"></div>
+                    <h4 class="text-gray-300 font-medium mb-2 text-lg uppercase tracking-widest text-sm">Aumento de Productividad</h4>
+                    <div x-data="{ count: 0 }" x-intersect.once="let interval = setInterval(() => { if(count < 85) count += 1; else clearInterval(interval); }, 25)" class="text-7xl font-black font-heading text-white mb-2 drop-shadow-xl" style="transform: translateZ(30px);">
+                        <span x-text="count"></span><span class="text-cyanAccent">%</span>
+                    </div>
+                </div>
+
+                <div data-tilt data-tilt-glare data-tilt-max-glare="0.2" data-aos="fade-left" data-aos-delay="300" class="glass-card rounded-3xl p-8 flex-1 flex flex-col justify-center relative group overflow-hidden">
+                    <div class="absolute -right-20 -top-20 w-64 h-64 bg-purple-500/20 blur-[80px] group-hover:bg-purple-500/40 transition-colors"></div>
+                    <h4 class="text-gray-300 font-medium mb-2 text-lg uppercase tracking-widest text-sm">Integridad Estructural</h4>
+                    <div x-data="{ count: 0 }" x-intersect.once="let interval = setInterval(() => { if(count < 100) count += 2; else clearInterval(interval); }, 30)" class="text-7xl font-black font-heading text-white mb-2 drop-shadow-xl" style="transform: translateZ(30px);">
+                        <span x-text="count"></span><span class="text-purple-400">%</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Conclusiones -->
+        <div class="mt-8">
+            <div data-tilt data-aos="fade-up" class="glass-card rounded-3xl p-10 relative overflow-hidden border-t-4 border-t-blue-400 max-w-3xl mx-auto">
+                <div class="absolute inset-0 bg-blue-900/10 z-0"></div>
+                <h4 class="text-2xl font-bold text-white mb-6 relative z-10 border-b border-white/10 pb-4 flex items-center"><i class="fa-solid fa-check-double text-blue-400 mr-3 text-3xl"></i> Conclusiones</h4>
+                <ul class="space-y-5 text-gray-300 relative z-10 text-sm">
+                    <li class="flex items-start"><i class="fa-solid fa-check text-cyanAccent mt-1 mr-3"></i> <div>El sistema desarrollado resultó ser <strong>altamente funcional, eficiente y replicable</strong>.</div></li>
+                    <li class="flex items-start"><i class="fa-solid fa-check text-cyanAccent mt-1 mr-3"></i> <div>La interfaz moderna erradicó la complejidad inherente a los cálculos ISO, facilitando su adopción inmediata por el personal bibliotecario.</div></li>
+                    <li class="flex items-start"><i class="fa-solid fa-quote-left text-cyanAccent/50 mt-1 mr-3"></i> <div class="italic text-gray-400">"Los datos bien gestionados se convierten en decisiones inteligentes."</div></li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="border-t border-white/10 py-12 text-center text-sm text-gray-400 bg-background relative z-10 hidden md:block mt-12">
+        <p class="mb-2 tracking-widest uppercase font-bold text-xs text-cyanAccent">Diseñado para Defensa de Tesis</p>
+        <p class="font-medium">Universidad de Carabobo - 2026</p>
+    </footer>
+
+    <!-- JS Modularizado -->
+    <script src="./assets/js/main.js"></script>
+</body>
+</html>

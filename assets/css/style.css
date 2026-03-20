@@ -1,0 +1,101 @@
+body {
+    background-color: #020617;
+    color: #f8fafc;
+    overflow-x: hidden;
+}
+
+#tsparticles {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -20;
+    pointer-events: none;
+}
+
+/* Glassmorphism Utilities */
+.glass-card {
+    background: rgba(255, 255, 255, 0.02);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    transform-style: preserve-3d;
+}
+
+.glass-card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0) 100%);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+}
+
+.glass-card:hover {
+    border-color: rgba(6, 182, 212, 0.4);
+    box-shadow: 0 0 30px rgba(6, 182, 212, 0.15);
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Shimmer Text Effect */
+.text-shimmer {
+    background: linear-gradient(to right, #f8fafc 20%, #06b6d4 40%, #06b6d4 60%, #f8fafc 80%);
+    background-size: 200% auto;
+    color: #000;
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: shimmer 3s linear infinite;
+}
+
+/* Glowing Border Animation */
+.glow-border {
+    position: relative;
+}
+
+.glow-border::after {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    background: linear-gradient(45deg, #06b6d4, #8b5cf6, #3b82f6, #06b6d4);
+    z-index: -1;
+    border-radius: inherit;
+    background-size: 300% 300%;
+    animation: shimmer 4s linear infinite;
+    filter: blur(8px);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.glow-border:hover::after {
+    opacity: 0.6;
+}
+
+/* Base de Datos / DB Diagram Code Block Style */
+.code-block {
+    background: #0d1117;
+    border: 1px solid #30363d;
+    border-radius: 12px;
+    padding: 24px;
+    font-family: 'Consolas', 'Monaco', monospace;
+    font-size: 0.9rem;
+    color: #c9d1d9;
+    overflow-x: auto;
+}
+.keyword { color: #ff7b72; }
+.type { color: #79c0ff; }
+.string { color: #a5d6ff; }
+.comment { color: #8b949e; }
+.table-name { color: #d2a8ff; font-weight: bold; }
+
+/* Estilos de scrollbar personalizados */
+::-webkit-scrollbar { width: 10px; }
+::-webkit-scrollbar-track { background: #020617; }
+::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 5px; border: 2px solid #020617; }
+::-webkit-scrollbar-thumb:hover { background: #06b6d4; }
